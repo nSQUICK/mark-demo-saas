@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricewatch — мониторинг цен на маркетплейсах</title>
+  <meta name="description" content="Pricewatch — SaaS-сервис мониторинга цен конкурентов на маркетплейсах для селлеров. Демо-страница." />
+
+  <!-- Шрифты только из Google Fonts: Instrument Serif (italic), Geist, Geist Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind через CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Конфигурация Tailwind: расширяем палитру и шрифты под dark luxury тему
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:    '#0A0A0A', // глубокий чёрный (не #000)
+            ink:   '#E8E5DE', // тёплый off-white основной текст
+            gold:  '#D4A574', // золотистый акцент — использовать ТОЧЕЧНО
+            danger:'#C97064', // приглушённый красный для негативной дельты
+            ok:    '#7B8E6F', // приглушённый зелёный для позитивной дельты
+          },
+          fontFamily: {
+            // serif italic — для display
+            serif: ['"Instrument Serif"', 'serif'],
+            // sans — для body
+            sans:  ['"Geist"', 'system-ui', 'sans-serif'],
+            // mono — для tech, eyebrow, метрик
+            mono:  ['"Geist Mono"', 'ui-monospace', 'monospace'],
+          },
+          letterSpacing: {
+            // широкий tracking для mono uppercase подписей
+            'wider2': '0.18em',
+          },
+          maxWidth: {
+            'shell': '1280px',
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Базовые стили — фон, текст, шрифт по умолчанию */
+    html, body {
+      background: #0A0A0A;
+      color: #E8E5DE;
+      font-family: 'Geist', system-ui, sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    /* Тонкие divider-линии */
+    .hairline { background: rgba(232,229,222,0.08); }
+    .hairline-strong { background: rgba(232,229,222,0.2); }
+    .border-hairline { border-color: rgba(232,229,222,0.08); }
+    .border-hairline-strong { border-color: rgba(232,229,222,0.1); }
+    .border-hairline-form { border-color: rgba(232,229,222,0.2); }
+    .text-secondary { color: rgba(232,229,222,0.55); }
+
+    /* Sticky nav backdrop — едва заметное затемнение, чтобы текст оставался читабелен при скролле */
+    .nav-blur {
+      background: rgba(10,10,10,0.78);
+      backdrop-filter: saturate(140%) blur(8px);
+      -webkit-backdrop-filter: saturate(140%) blur(8px);
+    }
+
+    /* Hero h1: огромный Instrument Serif italic, плотный line-height */
+    .display {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+    }
+
+    /* Заголовки секций — тот же display, чуть меньше */
+    .display-md {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.005em;
+    }
+
+    /* Mono eyebrow */
+    .eyebrow {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      font-weight: 400;
+    }
+
+    /* Стилизованный input для CTA: прозрачный, только нижняя линия */
+    .field {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid rgba(232,229,222,0.2);
+      color: #E8E5DE;
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      padding: 14px 0;
+      outline: none;
+      transition: border-color 200ms ease;
+    }
+    .field::placeholder {
+      color: rgba(232,229,222,0.35);
+    }
+    .field:focus {
+      border-bottom-color: rgba(232,229,222,0.55);
+    }
+
+    /* Кнопка-ссылка в стиле «текст + стрелка» */
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      color: #E8E5DE;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      transition: opacity 200ms ease;
+    }
+    .ghost-btn:hover { opacity: 0.7; }
+
+    /* Кнопка тарифа: тонкая рамка по всему периметру */
+    .plan-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 16px 18px;
+      border: 1px solid rgba(232,229,222,0.2);
+      color: inherit;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: lowercase;
+      transition: border-color 200ms ease, color 200ms ease;
+    }
+    .plan-btn:hover {
+      border-color: rgba(232,229,222,0.55);
+    }
+
+    /* Размеры display заголовков адаптивно */
+    .h1-hero { font-size: 56px; }
+    @media (min-width: 768px) { .h1-hero { font-size: 88px; } }
+    @media (min-width: 1024px) { .h1-hero { font-size: 112px; } }
+
+    .h2-section { font-size: 44px; }
+    @media (min-width: 768px) { .h2-section { font-size: 72px; } }
+    @media (min-width: 1024px) { .h2-section { font-size: 96px; } }
+
+    .metric-num { font-size: 72px; }
+    @media (min-width: 768px) { .metric-num { font-size: 112px; } }
+
+    .price-num { font-size: 40px; }
+    @media (min-width: 768px) { .price-num { font-size: 56px; } }
+
+    /* Generous vertical spacing между секциями */
+    .section-pad { padding-top: 96px; padding-bottom: 96px; }
+    @media (min-width: 1024px) {
+      .section-pad { padding-top: 160px; padding-bottom: 160px; }
+    }
+
+    /* Dashboard mock — таблица */
+    .dash-table { width: 100%; border-collapse: collapse; }
+    .dash-table th, .dash-table td {
+      padding: 18px 16px;
+      text-align: left;
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+      font-weight: 300;
+      border-bottom: 1px solid rgba(232,229,222,0.06);
+    }
+    .dash-table th {
+      color: rgba(232,229,222,0.45);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding-top: 0;
+      padding-bottom: 14px;
+      font-weight: 400;
+    }
+    .dash-table tbody tr:last-child td { border-bottom: 0; }
+    .dash-row-highlight { position: relative; }
+    /* Единственная золотистая метка в dashboard — слева у одной строки */
+    .dash-row-highlight td:first-child::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 4px;
+      background: #D4A574;
+    }
+
+    /* Скрываем длинные значения в таблице на узких экранах элегантно */
+    @media (max-width: 640px) {
+      .dash-table th, .dash-table td { padding: 14px 8px; font-size: 12px; }
+      .dash-hide-sm { display: none; }
+    }
+  </style>
+</head>
+<body class="bg-bg text-ink">
+
+  <!-- =========================================================
+       1. NAV — sticky top, минимальная, mono uppercase
+       ========================================================= -->
+  <header class="sticky top-0 z-50 nav-blur border-b border-hairline">
+    <div class="max-w-shell mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+      <a href="#top" class="font-mono text-[11px] uppercase tracking-wider2 text-ink">
+        PRICEWATCH
+      </a>
+      <nav class="flex items-center gap-6 sm:gap-10 font-mono text-[11px] uppercase tracking-wider2 text-secondary">
+        <a href="#features" class="hover:text-ink transition-colors">Возможности</a>
+        <a href="#pricing"  class="hover:text-ink transition-colors">Тарифы</a>
+        <a href="#cta"      class="hover:text-ink transition-colors">Заявка</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- =========================================================
+         2. HERO — 100vh, generous padding
+         Использование gold #1: одно слово в h1 ("под контролем")
+         Использование gold #2: горизонтальная линия 60px
+         ========================================================= -->
+    <section class="min-h-screen flex items-center">
+      <div class="max-w-shell mx-auto w-full px-6 lg:px-10 py-32 lg:py-48">
+        <!-- Eyebrow в hero: mono, золотистый — явно потребовано ТЗ -->
+        <p class="eyebrow text-gold mb-10">PRICING INTELLIGENCE — V1.0</p>
+
+        <h1 class="display h1-hero text-ink max-w-5xl">
+          Цены конкурентов <br class="hidden md:block" />под&nbsp;<span class="text-gold">контролем</span>
+        </h1>
+
+        <p class="font-serif italic text-[20px] md:text-[22px] text-ink mt-10 max-w-2xl leading-snug">
+          Один сервис вместо десятка вкладок и таблиц.
+        </p>
+
+        <p class="font-sans text-[15px] text-secondary mt-6 max-w-xl leading-relaxed">
+          Pricewatch следит за ценами ваших SKU и SKU конкурентов на Wildberries, Ozon, Яндекс Маркет
+          и других маркетплейсах — и сообщает о каждом изменении прежде, чем вы потеряете заказ.
+        </p>
+
+        <!-- Тонкая золотистая горизонтальная линия 60px -->
+        <div class="mt-16 h-px w-[60px] bg-gold"></div>
+
+        <!-- Метрика: огромное mono число -->
+        <div class="mt-12">
+          <div class="font-mono metric-num text-ink leading-none tracking-tight">0.4s</div>
+          <p class="eyebrow text-secondary mt-4">среднее время обновления цены</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         3. ВОЗМОЖНОСТИ — 2x2 grid на desktop, stack на mobile
+         Разделители — тонкие линии rgba(232,229,222,0.08)
+         ========================================================= -->
+    <section id="features" class="section-pad border-t border-hairline">
+      <div class="max-w-shell mx-auto px-6 lg:px-10">
+
+        <div class="mb-20 lg:mb-32">
+          <p class="eyebrow text-secondary mb-8">КЛЮЧЕВЫЕ ВОЗМОЖНОСТИ — 04</p>
+          <h2 class="display-md h2-section text-ink max-w-4xl">
+            Контроль рынка<br />в&nbsp;четыре движения.
+          </h2>
+        </div>
+
+        <!-- Grid: 1 колонка mobile, 2 колонки desktop. Линии-разделители реализованы через border у самих ячеек. -->
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <!-- 01 Мониторинг -->
+          <article class="p-8 lg:p-12 border-t border-hairline md:border-r">
+            <p class="font-mono text-[12px] tracking-wider2 text-gold mb-10">01</p>
+            <h3 class="font-serif italic text-[28px] md:text-[32px] leading-tight text-ink mb-5">
+              Мониторинг
+            </h3>
+            <p class="font-sans text-[14px] text-secondary leading-relaxed max-w-md">
+              Отслеживание SKU на 15+ маркетплейсах. Автоматическая привязка карточек,
+              ежечасное обновление, история цен с первого дня подключения.
+            </p>
+          </article>
+
+          <!-- 02 Алерты -->
+          <article class="p-8 lg:p-12 border-t border-hairline">
+            <p class="font-mono text-[12px] tracking-wider2 text-gold mb-10">02</p>
+            <h3 class="font-serif italic text-[28px] md:text-[32px] leading-tight text-ink mb-5">
+              Алерты
+            </h3>
+            <p class="font-sans text-[14px] text-secondary leading-relaxed max-w-md">
+              Telegram и email-уведомления при изменении цены конкурента, выходе товара
+              из стока или появлении новых игроков в нише.
+            </p>
+          </article>
+
+          <!-- 03 Отчёты -->
+          <article class="p-8 lg:p-12 border-t border-hairline md:border-r">
+            <p class="font-mono text-[12px] tracking-wider2 text-gold mb-10">03</p>
+            <h3 class="font-serif italic text-[28px] md:text-[32px] leading-tight text-ink mb-5">
+              Отчёты
+            </h3>
+            <p class="font-sans text-[14px] text-secondary leading-relaxed max-w-md">
+              Еженедельная аналитика в PDF: динамика, средняя цена ниши, упущенная маржа,
+              рекомендации по корректировке прайса.
+            </p>
+          </article>
+
+          <!-- 04 API -->
+          <article class="p-8 lg:p-12 border-t border-b border-hairline">
+            <p class="font-mono text-[12px] tracking-wider2 text-gold mb-10">04</p>
+            <h3 class="font-serif italic text-[28px] md:text-[32px] leading-tight text-ink mb-5">
+              API
+            </h3>
+            <p class="font-sans text-[14px] text-secondary leading-relaxed max-w-md">
+              REST и Webhook для интеграции с вашей ERP, 1С или собственным
+              ценовым движком. Документация и sandbox-окружение.
+            </p>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         4. DASHBOARD PREVIEW — CSS-only mock-up
+         Использование gold #3: вертикальная метка слева у одной строки
+         (см. .dash-row-highlight)
+         ========================================================= -->
+    <section class="section-pad">
+      <div class="max-w-shell mx-auto px-6 lg:px-10">
+
+        <p class="eyebrow text-secondary mb-8">INTERFACE PREVIEW</p>
+        <h2 class="display-md text-[40px] md:text-[64px] text-ink max-w-3xl mb-16 lg:mb-24">
+          Один экран<br />вместо десяти вкладок.
+        </h2>
+
+        <!-- Card -->
+        <div class="rounded-md border border-hairline-strong overflow-hidden">
+
+          <!-- Top-bar — три точки + адрес -->
+          <div class="flex items-center gap-4 px-5 py-4 border-b border-hairline">
+            <div class="flex gap-2">
+              <span class="block w-[10px] h-[10px] rounded-full" style="background:rgba(232,229,222,0.18)"></span>
+              <span class="block w-[10px] h-[10px] rounded-full" style="background:rgba(232,229,222,0.18)"></span>
+              <span class="block w-[10px] h-[10px] rounded-full" style="background:rgba(232,229,222,0.18)"></span>
+            </div>
+            <p class="font-mono text-[12px] text-secondary mx-auto pr-12">pricewatch.app/dashboard</p>
+          </div>
+
+          <!-- Тело: таблица -->
+          <div class="px-4 sm:px-8 py-6 sm:py-10">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Конкурент</th>
+                  <th class="text-right">Их цена</th>
+                  <th class="text-right dash-hide-sm">Твоя цена</th>
+                  <th class="text-right">Δ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-ink">WB-481203</td>
+                  <td class="text-secondary">seller_north</td>
+                  <td class="text-right text-ink">2 490 ₽</td>
+                  <td class="text-right text-ink dash-hide-sm">2 690 ₽</td>
+                  <td class="text-right" style="color:#7B8E6F">↑ 3.2%</td>
+                </tr>
+
+                <!-- Подсвеченный ряд (золотистая вертикальная метка слева) -->
+                <tr class="dash-row-highlight">
+                  <td class="text-ink pl-4">OZ-770411</td>
+                  <td class="text-secondary">vega.shop</td>
+                  <td class="text-right text-ink">4 120 ₽</td>
+                  <td class="text-right text-ink dash-hide-sm">4 590 ₽</td>
+                  <td class="text-right" style="color:#C97064">↓ 4.8%</td>
+                </tr>
+
+                <tr>
+                  <td class="text-ink">YM-002857</td>
+                  <td class="text-secondary">aether_co</td>
+                  <td class="text-right text-ink">12 900 ₽</td>
+                  <td class="text-right text-ink dash-hide-sm">13 200 ₽</td>
+                  <td class="text-right text-secondary">— 0.0%</td>
+                </tr>
+                <tr>
+                  <td class="text-ink">WB-129044</td>
+                  <td class="text-secondary">linea_brand</td>
+                  <td class="text-right text-ink">890 ₽</td>
+                  <td class="text-right text-ink dash-hide-sm">990 ₽</td>
+                  <td class="text-right" style="color:#7B8E6F">↑ 1.1%</td>
+                </tr>
+                <tr>
+                  <td class="text-ink">OZ-558820</td>
+                  <td class="text-secondary">forma.atelier</td>
+                  <td class="text-right text-ink">7 350 ₽</td>
+                  <td class="text-right text-ink dash-hide-sm">7 200 ₽</td>
+                  <td class="text-right" style="color:#C97064">↓ 2.0%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         5. ТАРИФЫ — 3 колонки, средняя выделена
+         Использование gold #4: тонкая золотистая рамка у "Бизнес"
+         + eyebrow "РЕКОМЕНДУЕМ" mono золотистый
+         ========================================================= -->
+    <section id="pricing" class="section-pad border-t border-hairline">
+      <div class="max-w-shell mx-auto px-6 lg:px-10">
+
+        <div class="mb-20 lg:mb-32 max-w-4xl">
+          <p class="eyebrow text-secondary mb-8">ТАРИФЫ — 03</p>
+          <h2 class="display-md h2-section text-ink">
+            Прозрачно<br />и&nbsp;без сюрпризов.
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-px hairline">
+          <!-- Старт -->
+          <article class="bg-bg p-8 lg:p-12 flex flex-col">
+            <p class="eyebrow text-secondary mb-10">ТАРИФ — 01</p>
+            <h3 class="font-serif italic text-[36px] text-ink mb-8">Старт</h3>
+            <div class="font-mono price-num text-ink leading-none mb-2">1 990 ₽</div>
+            <p class="eyebrow text-secondary mb-12">в месяц</p>
+
+            <ul class="font-sans text-[14px] text-ink space-y-4 mb-12 flex-1">
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>50 SKU в мониторинге</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Базовые алерты на email</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>История цен 30 дней</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Поддержка по тикетам</span></li>
+            </ul>
+
+            <a href="#cta" class="plan-btn">выбрать</a>
+          </article>
+
+          <!-- Бизнес — выделенный, тонкая золотистая рамка -->
+          <article class="bg-bg p-8 lg:p-12 flex flex-col relative" style="outline:1px solid #D4A574; outline-offset:-1px;">
+            <p class="eyebrow text-gold mb-10">РЕКОМЕНДУЕМ</p>
+            <h3 class="font-serif italic text-[36px] text-ink mb-8">Бизнес</h3>
+            <div class="font-mono price-num text-ink leading-none mb-2">4 990 ₽</div>
+            <p class="eyebrow text-secondary mb-12">в месяц</p>
+
+            <ul class="font-sans text-[14px] text-ink space-y-4 mb-12 flex-1">
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>500 SKU в мониторинге</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Алерты в Telegram и email</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Еженедельные отчёты в PDF</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>REST API и Webhook</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>История цен 12 месяцев</span></li>
+            </ul>
+
+            <a href="#cta" class="plan-btn">выбрать</a>
+          </article>
+
+          <!-- Энтерпрайз -->
+          <article class="bg-bg p-8 lg:p-12 flex flex-col">
+            <p class="eyebrow text-secondary mb-10">ТАРИФ — 03</p>
+            <h3 class="font-serif italic text-[36px] text-ink mb-8">Энтерпрайз</h3>
+            <div class="font-mono price-num text-ink leading-none mb-2">по запросу</div>
+            <p class="eyebrow text-secondary mb-12">индивидуально</p>
+
+            <ul class="font-sans text-[14px] text-ink space-y-4 mb-12 flex-1">
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Без лимитов по SKU</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>SLA с гарантией доступности</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Выделенный менеджер</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>Кастомные интеграции</span></li>
+              <li class="flex gap-4"><span class="text-gold select-none">—</span><span>On-premise по согласованию</span></li>
+            </ul>
+
+            <a href="#cta" class="plan-btn">обсудить</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         6. CTA — форма-заглушка
+         ========================================================= -->
+    <section id="cta" class="section-pad border-t border-hairline">
+      <div class="max-w-shell mx-auto px-6 lg:px-10">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-secondary mb-8">ЗАЯВКА — DEMO ONLY</p>
+
+          <h2 class="display-md text-[44px] md:text-[72px] text-ink mb-10 leading-[1.0]">
+            Запросите<br />ранний доступ.
+          </h2>
+
+          <p class="font-sans text-[15px] text-secondary leading-relaxed max-w-xl mb-16">
+            Pricewatch в закрытой бете. Оставьте контакт — и мы свяжемся в течение 24 часов
+            для подбора тарифа и подключения SKU.
+          </p>
+
+          <!-- Форма: НЕ работает. Никаких action/onSubmit. preventDefault для надёжности. -->
+          <form class="max-w-xl" onsubmit="event.preventDefault(); return false;" novalidate>
+            <div class="mb-10">
+              <label class="eyebrow text-secondary block mb-3" for="f-email">EMAIL</label>
+              <input id="f-email" type="text" class="field" placeholder="ваш рабочий email" autocomplete="off" />
+            </div>
+
+            <div class="mb-12">
+              <label class="eyebrow text-secondary block mb-3" for="f-link">ССЫЛКА НА МАРКЕТПЛЕЙС</label>
+              <input id="f-link" type="text" class="field" placeholder="карточка вашего товара" autocomplete="off" />
+            </div>
+
+            <button type="button" class="ghost-btn" onclick="return false;">
+              <span>Отправить</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </form>
+
+          <p class="font-mono text-[11px] text-secondary mt-12 tracking-wider2">
+            demo only — заявки в этой версии не отправляются
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       7. FOOTER
+       ========================================================= -->
+  <footer class="border-t border-hairline">
+    <div class="max-w-shell mx-auto px-6 lg:px-10 py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <p class="font-mono text-[11px] tracking-wider2 text-secondary uppercase">
+        PRICEWATCH / 2026 / DEMO BUILD
+      </p>
+      <p class="font-mono text-[11px] tracking-wider2 text-secondary uppercase">
+        связь через биржу
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
