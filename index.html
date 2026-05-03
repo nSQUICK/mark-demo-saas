@@ -32,6 +32,7 @@
 </script>
 <style>
   html, body { background:#0A0A0A; color:#FAFAFA; font-family:'Manrope', sans-serif; font-weight:200; }
+  html, body { overflow-x: hidden; max-width: 100%; }
   body { -webkit-font-smoothing:antialiased; }
   .display { font-family:'Manrope', sans-serif; font-weight:800; letter-spacing:-0.04em; line-height:0.92; }
   .mono { font-family:'JetBrains Mono', monospace; }
@@ -79,7 +80,7 @@
 <!-- HERO -->
 <section class="relative pt-14">
   <div class="relative h-[88vh] min-h-[640px] overflow-hidden">
-    <img src="https://image.pollinations.ai/prompt/abstract%20technology%20dashboard%20visualization%20dark%20cyan%20glow%20data%20charts%20futuristic%20minimalist?width=2400&height=1200&seed=11&nologo=true&model=flux"
+    <img src="assets/img-01-abstract-technology-dashboard-visualizat-11.jpg"
          alt="" loading="eager"
          class="absolute inset-0 w-full h-full object-cover" />
     <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.35) 40%, rgba(10,10,10,0.95) 100%);"></div>
@@ -97,7 +98,7 @@
 
       <div class="mt-auto pb-16 grid grid-cols-12 gap-6">
         <div class="col-span-12 md:col-span-9">
-          <h1 class="display text-[16vw] md:text-[9.5vw] text-ink">
+          <h1 class="display text-ink" style="font-size: clamp(40px, 9vw, 112px); overflow-wrap: break-word; word-break: break-word; hyphens: auto;">
             видите цены<br>
             конкурентов<br>
             <span style="color:#00D9FF;">за 0.4&nbsp;секунды</span>.
@@ -161,7 +162,7 @@
     <div class="grid grid-cols-12 gap-6">
       <article class="col-span-12 md:col-span-6 border border-line bg-surface flex flex-col">
         <div class="aspect-[16/9] overflow-hidden bg-bg relative">
-          <img src="https://image.pollinations.ai/prompt/price%20chart%20gradient%20tech%20dark%20cyan%20line%20graph%20minimalist%20futuristic?width=1200&height=675&seed=33&nologo=true&model=flux"
+          <img src="assets/img-02-price-chart-gradient-tech-dark-cyan-line-33.jpg"
                alt="" loading="lazy" class="w-full h-full object-cover opacity-90"/>
           <div class="absolute inset-0" style="background:linear-gradient(180deg, transparent 40%, rgba(17,17,19,0.9));"></div>
           <span class="badge-float" style="top:1rem; left:1rem; color:#00D9FF; border-color:#00D9FF;">live &middot; 0.4s</span>
@@ -175,7 +176,7 @@
 
       <article class="col-span-12 md:col-span-6 border border-line bg-surface flex flex-col">
         <div class="aspect-[16/9] overflow-hidden bg-bg relative">
-          <img src="https://image.pollinations.ai/prompt/notification%20bell%20alert%20illustration%20minimalist%20tech%20dark%20coral%20red%20glow?width=1200&height=675&seed=44&nologo=true&model=flux"
+          <img src="assets/img-03-notification-bell-alert-illustration-min-44.jpg"
                alt="" loading="lazy" class="w-full h-full object-cover opacity-90"/>
           <div class="absolute inset-0" style="background:linear-gradient(180deg, transparent 40%, rgba(17,17,19,0.9));"></div>
           <span class="badge-float" style="top:1rem; left:1rem; color:#FF4D6B; border-color:#FF4D6B;">alert &middot; -7.4%</span>
@@ -189,7 +190,7 @@
 
       <article class="col-span-12 md:col-span-4 border border-line bg-surface flex flex-col">
         <div class="aspect-[1/1] overflow-hidden bg-bg relative">
-          <img src="https://image.pollinations.ai/prompt/document%20graph%20report%20illustration%20dark%20technology%20minimalist%20paper%20chart?width=800&height=800&seed=55&nologo=true&model=flux"
+          <img src="assets/img-04-document-graph-report-illustration-dark-55.jpg"
                alt="" loading="lazy" class="w-full h-full object-cover opacity-85"/>
           <div class="absolute inset-0" style="background:linear-gradient(180deg, transparent 40%, rgba(17,17,19,0.92));"></div>
         </div>
@@ -202,7 +203,7 @@
 
       <article class="col-span-12 md:col-span-4 border border-line bg-surface flex flex-col">
         <div class="aspect-[1/1] overflow-hidden bg-bg relative">
-          <img src="https://image.pollinations.ai/prompt/api%20code%20terminal%20screen%20cyan%20text%20dark%20futuristic%20minimalist?width=800&height=800&seed=66&nologo=true&model=flux"
+          <img src="assets/img-05-api-code-terminal-screen-cyan-text-dark-66.jpg"
                alt="" loading="lazy" class="w-full h-full object-cover opacity-85"/>
           <div class="absolute inset-0" style="background:linear-gradient(180deg, transparent 40%, rgba(17,17,19,0.92));"></div>
         </div>
@@ -247,7 +248,7 @@
     </div>
 
     <div class="relative border border-line rounded-md overflow-hidden">
-      <img src="https://image.pollinations.ai/prompt/modern%20saas%20analytics%20dashboard%20ui%20screenshot%20dark%20theme%20cyan%20accents%20charts%20metrics%20minimalist%20clean%20grid%20layout?width=2400&height=1400&seed=22&nologo=true&model=flux"
+      <img src="assets/img-06-modern-saas-analytics-dashboard-ui-scree-22.jpg"
            alt="" loading="lazy" class="w-full block"/>
       <div class="badge-float" style="top:8%; left:5%; color:#00D9FF; border-color:#00D9FF;">
         <span class="dot" style="background:#00D9FF;"></span> live &middot; WS поток
@@ -433,7 +434,7 @@
 <section class="border-t border-line">
   <div class="max-w-[1400px] mx-auto px-6 md:px-10 py-32 md:py-40 text-center">
     <div class="mono text-[11px] text-mute uppercase tracking-[0.2em]">demo only &middot; связь через биржу</div>
-    <h3 class="mt-6 display text-5xl md:text-8xl">
+    <h3 class="mt-6 display" style="font-size: clamp(36px, 8vw, 96px); overflow-wrap: break-word; word-break: break-word;">
       перестаньте<br>
       <span style="color:#00D9FF;">проигрывать buy-box</span>.
     </h3>
